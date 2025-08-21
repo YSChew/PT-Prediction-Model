@@ -123,4 +123,6 @@ def umdio_course_data():
     course2_df = pd.concat(df_array, ignore_index=True)
     course2_df.to_csv("UMDIOcourse_data.csv", index=False)
     print("UMDIO course data retreived and .csv created.")
+
 umdio_course_data()
+pterp_course_data()
