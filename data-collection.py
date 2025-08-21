@@ -108,7 +108,8 @@ def umdio_course_data():
 
                 curr_coursedf = curr_coursedf.drop(labels=["name", "relationships.formerly", 
                                                            "relationships.restrictions", 
-                                                           "relationships.additional_info"])
+                                                           "relationships.additional_info", 
+                                                           "relationships.also_offered_as"], axis=1)
 
                 df_array.append(curr_coursedf) # Add back to array
                 print(f"UMD.io Courses Set {i} data retreived")
