@@ -1,19 +1,41 @@
 import pandas as pd
 from scipy import stats
+import matplotlib.pyplot as plt
 
-review_df = pd.read_csv("review_data.csv")
-# Quick analysis on data to find relevant features
-avg_exp_grade = review_df.groupby("professor_id")["expected_grade"].mean()
-avg_courseGPA = review_df.groupby("professor_id")["course_avgGPA"].mean()
-avg_courselvl = review_df.groupby("professor_id")["course_lvl"].mean()
-avg_credits = review_df.groupby("professor_id")["credits"].mean()
-pivot1 = pd.crosstab(review_df["review_score"], review_df["expected_grade"])
-print(stats.chi2_contingency(pivot1).pvalue)
-pivot2 = pd.crosstab(review_df["review_score"], review_df["course_avgGPA"])
-print(stats.chi2_contingency(pivot2).pvalue)
-pivot3 = pd.crosstab(review_df["review_score"], review_df["school"])
-print(stats.chi2_contingency(pivot3).pvalue)
-pivot4 = pd.crosstab(review_df["review_score"], review_df["credits"])
-print(stats.chi2_contingency(pivot4).pvalue)
-pivot5 = pd.crosstab(review_df["review_score"], review_df["expected_grade"] - review_df["course_avgGPA"])
-print(stats.chi2_contingency(pivot5).pvalue)
+ptc = pd.read_csv("PTcourse_data.csv")
+pts = pd.read_csv("PTstaff_data.csv")
+umc = pd.read_csv("UMDIOcourse_data.csv")
+
+'''
+Section 1: Data exploration on raw data
+'''
+
+print(ptc.columns)
+print(pts.columns)
+print(umc.columns)
+
+print(ptc.head(5))
+print(pts.head(5))
+print(umc.head(5))
+
+pts["round_avg"] = pts.average_rating.apply(lambda x: round(x, 2))
+counts = pts.round_avg.value_counts().sort_index()
+
+fig, axs = plt.subplots(1, 2)
+
+pts.round_avg.plot.hist(bins=20)
+axs[0].set_xlabel("Avg rating")
+axs[0].set_ylabel("N professors")
+axs[0].set_title("Avg rating vs professors")
+
+axs[0].scatter(ptc["credits"], ptc["average_gpa"], alpha=0.5)
+axs[0].set_xlabel("Credits")
+axs[0].set_ylabel("Avg GPA")
+axs[0].set_title("Credits vs Avg GPA")
+
+print(stats.pearsonr(ptc["credits"], ptc["average_gpa"]).pvalue)
+# Test correlation between credits and avg gpa
+df = ptc[["credits", "average_gpa"]].dropna()
+stats.pearsonr(df["credits"], df["average_gpa"])
+
+plt.show()

@@ -127,3 +127,4 @@ def umdio_course_data():
 
 umdio_course_data()
 pterp_course_data()
+pterp_staff_data()
